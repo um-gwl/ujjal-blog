@@ -27,7 +27,6 @@ class Dashboard extends Component {
     return (
       <div className='container'>
         <h1>Dashboard</h1>
-        <div className='row'>
         <div className="row">
           <div className="col s12 m6">
             <div className="card blue-grey darken-1">
@@ -40,7 +39,6 @@ class Dashboard extends Component {
               </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     );
