@@ -1,42 +1,56 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {checkLogin} from '../helpers/userHelpers';
+import {connect} from 'react-redux';
+import {userLoginData} from '../actions/UserSignup';
+
 
 import '../css/login.css';
 
 class Dashboard extends Component {
-  componentWillMount(){
-    const _token = localStorage.getItem('authToken');
-    checkLogin(_token,(response)=>{
-      if(!response){
+  constructor(props){
+    super(props);
+    this.props.userLoginData().then(()=>{
+      const userData = this.props.loginUser;
+      if(!userData){
+        return (
+            <div>Loading....</div>
+        );
+      }
+
+      if(!userData.status){
         this.props.history.push('/login');
       }
     });
   }
+
   render() {
     return (
-      <div className="login-box">
+      <div className='container'>
         <h1>Dashboard</h1>
         <div className='row'>
-          <div className='col-sm-12'>&nbsp;</div>
-          <div className='col-sm-8 text-right'>
-            <Link className='btn btn-primary' to='/posts/create'>Create post</Link>
+        <div className="row">
+          <div className="col s12 m6">
+            <div className="card blue-grey darken-1">
+              <div className="card-content white-text">
+                <span className="card-title">Your Posts</span>
+                <p>This card is only for posts.click below to see all the posts posted by you</p>
+              </div>
+              <div className="card-action">
+                <Link to='/posts'>Show Posts</Link>
+              </div>
+            </div>
           </div>
-          <div className='col-sm-4 text-right'>
-            <button className='btn btn-danger'>logout</button>
-          </div>
-          <div className='col-sm-12'>
-            <h1>Posts from the backend</h1>
-            <ul className='list-group'>
-              <li className='list-group-item'>post 1</li>
-              <li className='list-group-item'>post 2</li>
-              <li className='list-group-item'>post 2</li>
-            </ul>
-          </div>
+        </div>
         </div>
       </div>
     );
   }
 }
 
-export default Dashboard;
+function mapStateToprops({loginUser}){
+  return {
+    loginUser
+  };
+}
+
+export default connect(mapStateToprops,{userLoginData})(Dashboard);

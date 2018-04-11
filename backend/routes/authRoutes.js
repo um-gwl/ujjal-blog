@@ -76,7 +76,36 @@ module.exports = (app)=> {
       User.findOne({token : _AuthToken},(err,existUser) => {
         if(existUser){
           res.setHeader('Content-Type', 'application/json');
-          res.send(JSON.stringify({status:true}));
+          const responseData = {
+            name:existUser.name,
+            email:existUser.email
+          };
+          res.send(JSON.stringify({status:true,user:responseData}));
+        }
+        else{
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({status:false}));
+        }
+      });
+
+  })
+
+  app.get(
+    '/api/logout',
+    (req,res) => {
+      const _AuthToken = req.get('Authorization-token');
+      User.findOne({token : _AuthToken},(err,existUser) => {
+        if(existUser){
+          User.update({_id:existUser.id},{token:null},false,(err,response)=>{
+            if(response.n){
+              res.setHeader('Content-Type', 'application/json');
+              res.send(JSON.stringify({status:true}));
+            }
+            else{
+              res.setHeader('Content-Type', 'application/json');
+              res.send(JSON.stringify({status:false}));
+            }
+          })
         }
         else{
           res.setHeader('Content-Type', 'application/json');

@@ -1,15 +1,35 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
+import {userLoginData} from '../../actions/UserSignup';
+import {logoutUser} from '../../helpers/loginHelper';
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.onClickLogoutUser = this.onClickLogoutUser.bind(this);
+    this.props.userLoginData();
+  }
+
+  onClickLogoutUser(){
+    logoutUser((status)=>{
+      if(status){
+        this.props.history.push('/login');
+        this.props.userLoginData();
+      }
+      else{
+        alert("Error occured!! try again later");
+      }
+    })
+  }
+
   renderNavMenu(){
     const userData = this.props.loginUser;
-    if(userData){
+    if(userData.status){
       return (
           <ul id="nav-mobile" className="right hide-on-med-and-down">
-            <li><Link to="/logout">Logout</Link></li>
             <li><Link to="/dashboard">Dashboard</Link></li>
+            <li><a onClick={this.onClickLogoutUser}>Logout</a></li>
           </ul>
       );
     }
@@ -40,4 +60,4 @@ function mapStateToProps({loginUser}){
   return {loginUser};
 }
 
-export default connect()(Header);
+export default connect(mapStateToProps,{userLoginData})(withRouter(Header));

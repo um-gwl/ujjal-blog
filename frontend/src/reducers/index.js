@@ -1,8 +1,12 @@
 import {combineReducers} from 'redux';
-import googleLogin from './googleLogin';
+import userLoginData from './userLogin';
+import postsReducer from './postsReducer';
+import {reducer as formReducer} from 'redux-form';
 
  const rootReducers = combineReducers({
-   loginUser : googleLogin
+   loginUser : userLoginData,
+   posts:postsReducer,
+   form : formReducer
 });
 
 export default rootReducers;

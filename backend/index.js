@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 mongoose.connect(keys.mongoUrl);
 
 require('./models/Users');
+require('./models/Posts');
 
 const app = express();
 app.use(cors());
@@ -17,5 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const authRoutes = require('./routes/authRoutes');
 
 authRoutes(app);
+
+const postsRoutes = require('./routes/postsRoutes');
+postsRoutes(app);
 
 app.listen(5000);
